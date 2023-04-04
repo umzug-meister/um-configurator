@@ -1,0 +1,237 @@
+.page-umzugmeister-configurator .content,
+.page-umzugmeister-configurator-admin .content {
+  max-width: 100%; }
+
+@media not print {
+  .form--configurator {
+    position: relative; }
+  .form fieldset {
+    padding: 0;
+    border: 0 none;
+    margin: 20px 0;
+    position: relative; } }
+  @media screen and (min-width: 992px) {
+    .form fieldset {
+      margin: 40px 0; } }
+
+@media not print {
+    .form fieldset:first-of-type {
+      min-height: 144px; } }
+    @media screen and (min-width: 768px) {
+      .form fieldset:first-of-type {
+        min-height: 201px; } }
+
+@media not print {
+  .form .loading-screen {
+    position: absolute;
+    z-index: 9000;
+    top: 0;
+    left: 0;
+    background-color: #5fc5e8;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
+  .form .input-field {
+    position: relative;
+    width: 100%;
+    margin: 10px 0; } }
+  @media screen and (min-width: 768px) {
+    .form .input-field {
+      margin: 15px 0; } }
+
+@media not print {
+    .form .input-field:first-child {
+      margin-top: 0; }
+    .form .input-field:last-child {
+      margin-bottom: 0; }
+    .form .input-field > label {
+      position: absolute;
+      z-index: 1;
+      top: 8px;
+      left: 16px;
+      color: #ccc;
+      pointer-events: none;
+      font-weight: 600; } }
+    @media screen and (min-width: 768px) {
+      .form .input-field > label {
+        line-height: 36px;
+        font-size: 16px; } }
+
+@media not print {
+      .form .input-field > label > i {
+        display: inline-block;
+        margin-right: 10px; }
+    .form .input-field:focus-within > label {
+      opacity: 0; }
+    .form .input-field:focus-within input {
+      border: 2px solid #0f546c; }
+    .form .input-field--has-content > label {
+      opacity: 0;
+      transition: opacity 300ms ease-in; }
+    .form .input-field--has-error input {
+      border: 2px solid #f00 !important; }
+    .form .input-field--has-error .error-message {
+      display: block; }
+    .form .input-field--has-variants .autocomplete-variants.autocomplete-variants.autocomplete-variants {
+      display: block; }
+    .form .input-field .error-message {
+      color: #f00;
+      font-weight: 600;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      padding-left: 20px; }
+    .form .input-field input {
+      border: 2px solid #fff;
+      padding: 8px 16px;
+      width: 100%;
+      border-radius: 8px;
+      background-color: #f4f4f4;
+      outline: none;
+      font-weight: 600; } }
+    @media screen and (min-width: 768px) {
+      .form .input-field input {
+        line-height: 32px;
+        font-size: 16px;
+        border-radius: 15px; } }
+
+@media not print {
+      .form .input-field input:focus {
+        outline: none; }
+  .configurator {
+    padding-bottom: 40px; } }
+  @media screen and (min-width: 768px) {
+    .configurator {
+      padding-bottom: 0; } }
+
+@media not print {
+    .configurator__inner {
+      display: flex;
+      justify-content: center;
+      position: relative;
+      top: -10px; } }
+    @media screen and (min-width: 768px) {
+      .configurator__inner {
+        position: absolute;
+        bottom: 50px;
+        left: 0;
+        width: 100%;
+        top: auto; } }
+    @media screen and (min-width: 992px) {
+      .configurator__inner {
+        justify-content: flex-end; } }
+
+@media not print {
+    .configurator__close {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      color: #fff;
+      font-size: 26px;
+      opacity: 0.5;
+      cursor: pointer;
+      display: none;
+      z-index: 9000; }
+      .configurator__close:hover {
+        opacity: 1; } }
+  @media screen and (min-width: 768px) {
+    .configurator {
+      background-color: #ececee;
+      height: 400px;
+      position: relative; } }
+  @media screen and (min-width: 992px) {
+    .configurator {
+      height: 0; } }
+  @media screen and (min-width: 992px) {
+    .configurator > .container {
+      position: relative; } }
+  @media screen and (min-width: 992px) {
+    .configurator .box {
+      max-width: 480px; } }
+  @media screen and (min-width: 992px) {
+    .configurator .box__body {
+      padding: 40px 40px; } }
+
+@media not print {
+    .configurator--sticky {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 90000;
+      padding: 0; }
+      .configurator--sticky .configurator__close {
+        display: block; }
+      .configurator--sticky > .container {
+        width: 100%;
+        height: 100%; }
+        .configurator--sticky > .container > .configurator__inner {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center; }
+  .no-scroll {
+    overflow: hidden; }
+  .input-wrapper {
+    position: relative; }
+  .error-message {
+    display: none; }
+  .autocomplete-variants.autocomplete-variants.autocomplete-variants {
+    display: none;
+    position: absolute;
+    z-index: 9001;
+    left: 0;
+    top: 100%;
+    min-width: 100%;
+    background-color: #fff;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    border-radius: 7px;
+    list-style: none;
+    padding: 10px 5px;
+    margin: 0; }
+    .autocomplete-variants.autocomplete-variants.autocomplete-variants li {
+      margin: 5px 0;
+      color: #000;
+      cursor: pointer;
+      padding: 0 10px; }
+      .autocomplete-variants.autocomplete-variants.autocomplete-variants li:hover {
+        background-color: #ececee; }
+      .autocomplete-variants.autocomplete-variants.autocomplete-variants li.focused {
+        background-color: #f6f7f9; }
+  .lds-dual-ring {
+    display: inline-block;
+    width: 64px;
+    height: 64px; }
+  .lds-dual-ring::after {
+    content: ' ';
+    display: block;
+    width: 46px;
+    height: 46px;
+    margin: 1px;
+    border-radius: 50%;
+    border: 5px solid #fff;
+    border-color: #fff transparent #fff transparent;
+    -webkit-animation: lds-dual-ring 1.2s linear infinite;
+    animation: lds-dual-ring 1.2s linear infinite; }
+  @-webkit-keyframes lds-dual-ring {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg); }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg); } }
+  @keyframes lds-dual-ring {
+    0% {
+      -webkit-transform: rotate(0deg);
+      transform: rotate(0deg); }
+    100% {
+      -webkit-transform: rotate(360deg);
+      transform: rotate(360deg); } } }
+
+@media print {
+  .test {
+    color: #fff; } }
