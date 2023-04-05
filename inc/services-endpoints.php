@@ -45,8 +45,15 @@ add_action(
 			'um-configurator/v1',
 			'/service/',
 			array(
-				'methods'  => 'POST',
-				'callback' => 'umconf_create_service',
+				'methods'             => 'POST',
+				'callback'            => 'umconf_create_service',
+				'permission_callback' => function () {
+					if ( UM_CONFIG_DO_AUTH ) {
+						return is_user_logged_in();
+					} else {
+						return true;
+					}
+				},
 			)
 		);
 	}
@@ -59,8 +66,15 @@ add_action(
 			'um-configurator/v1',
 			'/service/(?P<id>\d+)',
 			array(
-				'methods'  => 'PUT',
-				'callback' => 'umconf_update_service',
+				'methods'             => 'PUT',
+				'callback'            => 'umconf_update_service',
+				'permission_callback' => function () {
+					if ( UM_CONFIG_DO_AUTH ) {
+						return is_user_logged_in();
+					} else {
+						return true;
+					}
+				},
 			)
 		);
 	}
@@ -73,8 +87,15 @@ add_action(
 			'um-configurator/v1',
 			'/service/(?P<id>\d+)',
 			array(
-				'methods'  => 'DELETE',
-				'callback' => 'umconf_delete_service',
+				'methods'             => 'DELETE',
+				'callback'            => 'umconf_delete_service',
+				'permission_callback' => function () {
+					if ( UM_CONFIG_DO_AUTH ) {
+						return is_user_logged_in();
+					} else {
+						return true;
+					}
+				},
 			)
 		);
 	}
@@ -105,10 +126,9 @@ function umconf_get_all_service( $request ) {
 		while ( $query->have_posts() ) {
 			$query->the_post();
 
-			$body      = get_the_content();
-			$jsonarray = json_decode( $body, true );
-
-			$jsonarray['name'] = get_the_title();
+			$body              = htmlspecialchars_decode( get_the_content() );
+			$jsonarray         = maybe_unserialize( $body );
+			$jsonarray['name'] = htmlspecialchars_decode( get_the_title() );
 			$jsonarray['id']   = get_the_ID();
 
 			$servicecategories = get_the_terms( get_the_ID(), 'service-categories' );
@@ -119,7 +139,7 @@ function umconf_get_all_service( $request ) {
 				foreach ( $servicecategories as $servicecategory ) {
 					$jsonarray['categoryRefs'][] = array(
 						'id'   => $servicecategory->term_id,
-						'name' => $servicecategory->name,
+						'name' => htmlspecialchars_decode( $servicecategory->name ),
 						'slug' => $servicecategory->slug,
 					);
 				}
@@ -159,10 +179,10 @@ function umconf_get_service( $request ) {
 		while ( $query->have_posts() ) {
 			$query->the_post();
 
-			$body      = get_the_content();
-			$jsonarray = json_decode( $body, true );
+			$body      = htmlspecialchars_decode( get_the_content() );
+			$jsonarray = maybe_unserialize( $body );
 
-			$jsonarray['name'] = get_the_title();
+			$jsonarray['name'] = htmlspecialchars_decode( get_the_title() );
 			$jsonarray['id']   = get_the_ID();
 
 			$servicecategories = get_the_terms( get_the_ID(), 'service-categories' );
@@ -173,7 +193,7 @@ function umconf_get_service( $request ) {
 				foreach ( $servicecategories as $servicecategory ) {
 					$jsonarray['categoryRefs'][] = array(
 						'id'   => $servicecategory->term_id,
-						'name' => $servicecategory->name,
+						'name' => htmlspecialchars_decode( $servicecategory->name ),
 						'slug' => $servicecategory->slug,
 					);
 				}
@@ -209,7 +229,7 @@ function umconf_create_service( $request ) {
 	$jsonarray  = json_decode( $request->get_body(), true );
 	$categories = array();
 
-	if ( $jsonarray['categoryRefs'] ) {
+	if ( isset( $jsonarray['categoryRefs'] ) ) {
 		foreach ( $jsonarray['categoryRefs'] as $catref ) {
 			$categories[] = $catref['id'];
 		}
@@ -226,7 +246,7 @@ function umconf_create_service( $request ) {
 			'post_title'   => $servicename,
 			'post_status'  => 'publish',
 			'post_type'    => 'services',
-			'post_content' => wp_json_encode( $jsonarray ),
+			'post_content' => maybe_serialize( $jsonarray ),
 		)
 	);
 
@@ -234,10 +254,53 @@ function umconf_create_service( $request ) {
 		wp_set_post_terms( $newpostid, $categories, 'service-categories', false );
 	}
 
-	$data     = array( 'message' => 'Zusatzleistung erstellt.' );
-	$response = new WP_REST_Response( $data );
-	$response->set_status( 200 );
-	return $response;
+	$args  = array(
+		'p'         => $newpostid,
+		'post_type' => 'services',
+	);
+	$query = new WP_Query( $args );
+
+	$services = array();
+
+	if ( $query->have_posts() ) {
+
+		while ( $query->have_posts() ) {
+			$query->the_post();
+
+			$body      = htmlspecialchars_decode( get_the_content() );
+			$jsonarray = maybe_unserialize( $body );
+
+			$jsonarray['name'] = htmlspecialchars_decode( get_the_title() );
+			$jsonarray['id']   = get_the_ID();
+
+			$servicecategories = get_the_terms( get_the_ID(), 'service-categories' );
+
+			if ( $servicecategories ) {
+				$jsonarray['categoryRefs'] = array();
+
+				foreach ( $servicecategories as $servicecategory ) {
+					$jsonarray['categoryRefs'][] = array(
+						'id'   => $servicecategory->term_id,
+						'name' => htmlspecialchars_decode( $servicecategory->name ),
+						'slug' => $servicecategory->slug,
+					);
+				}
+			}
+
+			$services[] = $jsonarray;
+		}
+
+		wp_reset_postdata();
+
+		$response = new WP_REST_Response( $services[0] );
+		$response->set_status( 201 );
+		return $response;
+	} else {
+		$data     = array( 'Zusatzleistung konnte nicht angelegt werden. ' );
+		$response = new WP_REST_Response( $data );
+		$response->set_status( 500 );
+		return $response;
+	}
 }
 
 /**
@@ -252,7 +315,7 @@ function umconf_update_service( $request ) {
 	$service_id = intval( $request['id'] );
 
 	$jsonarray = json_decode( $request->get_body(), true );
-	if ( $jsonarray['categoryRefs'] ) {
+	if ( isset( $jsonarray['categoryRefs'] ) ) {
 		foreach ( $jsonarray['categoryRefs'] as $catref ) {
 			$categories[] = $catref['id'];
 		}
@@ -270,7 +333,7 @@ function umconf_update_service( $request ) {
 			'post_title'   => $servicename,
 			'post_status'  => 'publish',
 			'post_type'    => 'services',
-			'post_content' => wp_json_encode( $jsonarray ),
+			'post_content' => maybe_serialize( $jsonarray ),
 		)
 	);
 
@@ -278,10 +341,53 @@ function umconf_update_service( $request ) {
 		wp_set_post_terms( $service_id, $categories, 'service-categories', false );
 	}
 
-	$data     = array( 'message' => 'Zusatzleistung aktualisiert.' );
-	$response = new WP_REST_Response( $data );
-	$response->set_status( 200 );
-	return $response;
+	$args  = array(
+		'p'         => $service_id,
+		'post_type' => 'services',
+	);
+	$query = new WP_Query( $args );
+
+	$services = array();
+
+	if ( $query->have_posts() ) {
+
+		while ( $query->have_posts() ) {
+			$query->the_post();
+
+			$body      = htmlspecialchars_decode( get_the_content() );
+			$jsonarray = maybe_unserialize( $body );
+
+			$jsonarray['name'] = htmlspecialchars_decode( get_the_title() );
+			$jsonarray['id']   = get_the_ID();
+
+			$servicecategories = get_the_terms( get_the_ID(), 'service-categories' );
+
+			if ( $servicecategories ) {
+				$jsonarray['categoryRefs'] = array();
+
+				foreach ( $servicecategories as $servicecategory ) {
+					$jsonarray['categoryRefs'][] = array(
+						'id'   => $servicecategory->term_id,
+						'name' => htmlspecialchars_decode( $servicecategory->name ),
+						'slug' => $servicecategory->slug,
+					);
+				}
+			}
+
+			$services[] = $jsonarray;
+		}
+
+		wp_reset_postdata();
+
+		$response = new WP_REST_Response( $services[0] );
+		$response->set_status( 200 );
+		return $response;
+	} else {
+		$data     = array( 'Zusatzleistung konnte nicht aktualisiert werden. ' );
+		$response = new WP_REST_Response( $data );
+		$response->set_status( 500 );
+		return $response;
+	}
 }
 
 /**
@@ -295,8 +401,7 @@ function umconf_delete_service( $request ) {
 
 	$service_id = intval( $request['id'] );
 	wp_delete_post( $service_id );
-	$data     = array( 'message' => 'Zusatzleistung gelöscht.' );
-	$response = new WP_REST_Response( $data );
-	$response->set_status( 200 );
+	$response = new WP_REST_Response();
+	$response->set_status( 204 );
 	return $response;
 }

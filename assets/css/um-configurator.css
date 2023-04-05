@@ -2,6 +2,13 @@
 .page-umzugmeister-configurator-admin .content {
   max-width: 100%; }
 
+.page-content-fullwidth .content {
+  max-width: 100%; }
+
+.page-umzugmeister-configurator-admin {
+  padding: 0 !important;
+  margin: 0 15px; }
+
 @media not print {
   .form--configurator {
     position: relative; }
@@ -12,7 +19,7 @@
     position: relative; } }
   @media screen and (min-width: 992px) {
     .form fieldset {
-      margin: 40px 0; } }
+      margin: 40px 0 20px; } }
 
 @media not print {
     .form fieldset:first-of-type {
@@ -114,7 +121,7 @@
     @media screen and (min-width: 768px) {
       .configurator__inner {
         position: absolute;
-        bottom: 50px;
+        bottom: 20px;
         left: 0;
         width: 100%;
         top: auto; } }
@@ -201,7 +208,7 @@
       .autocomplete-variants.autocomplete-variants.autocomplete-variants li:hover {
         background-color: #ececee; }
       .autocomplete-variants.autocomplete-variants.autocomplete-variants li.focused {
-        background-color: #f6f7f9; }
+        background-color: rgba(0, 0, 0, 0.25); }
   .lds-dual-ring {
     display: inline-block;
     width: 64px;
@@ -230,7 +237,82 @@
       transform: rotate(0deg); }
     100% {
       -webkit-transform: rotate(360deg);
-      transform: rotate(360deg); } } }
+      transform: rotate(360deg); } }
+  .form-date-selector {
+    margin: 10px 0; } }
+  @media screen and (min-width: 768px) {
+    .form-date-selector {
+      margin: 15px 0; } }
+
+@media not print {
+    .form-date-selector:first-child {
+      margin-top: 0; }
+    .form-date-selector:last-child {
+      margin-bottom: 0; }
+    .form-date-selector .form-title {
+      text-align: center;
+      width: 100%;
+      display: inline-block;
+      padding: 10px 0 5px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      margin-top: 18px; }
+  .text-center {
+    text-align: center; }
+  .form-radios-label {
+    display: inline-block;
+    padding: 0 30px 0 0;
+    cursor: pointer;
+    position: relative; }
+    .form-radios-label .form-radios {
+      position: absolute;
+      top: 0;
+      right: 0;
+      opacity: 0; }
+    .form-radios-label .form-radios-checkmark {
+      position: absolute;
+      display: inline-block;
+      top: 2px;
+      right: 0;
+      height: 20px;
+      width: 20px;
+      background-color: #fff;
+      border-radius: 50%;
+      border: 3px solid #fff; }
+    .form-radios-label:hover .form-radios ~ .form-radios-checkmark {
+      background-color: rgba(255, 255, 255, 0.7); }
+    .form-radios-label .form-radios:checked ~ .form-radios-checkmark {
+      background-color: rgba(255, 255, 255, 0.1); }
+  .two-inputs {
+    margin: 10px 0; } }
+  @media screen and (min-width: 768px) {
+    .two-inputs {
+      display: flex;
+      justify-content: space-between;
+      margin: 15px 0; } }
+
+@media not print {
+    .two-inputs--centered-all {
+      display: flex;
+      justify-content: space-around; }
+    .two-inputs--no-margin {
+      margin: 0 !important; }
+    .two-inputs--col {
+      margin: 10px 0; } }
+    @media screen and (min-width: 768px) {
+      .two-inputs--col {
+        max-width: 45%;
+        margin: 0; } }
+
+@media not print {
+      .two-inputs--col > .input-field {
+        margin: 0 !important; }
+  .btn.btn--small.btn--small.btn--small {
+    font-size: 16px;
+    line-height: 30px;
+    padding: 8px 30px; }
+  .configurator .box p.box__title {
+    text-align: center; } }
 
 @media print {
   .test {

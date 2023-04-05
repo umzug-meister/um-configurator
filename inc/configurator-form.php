@@ -35,9 +35,10 @@
 										v-model="originAddress"
 										v-on:input="getOriginAutocomplete"
 										v-on:focusout="deleteOriginAutocomplete"
+										v-on:keydown="originKeydown"
 										>
 									<ul class="autocomplete-variants">
-										<li v-for="item in originAddressVariants" v-html="item.description" v-on:click="selectOriginAddress(item.description)"></li>
+										<li v-for="(item, index) in originAddressVariants" v-bind:class="{ focused: index==originIndex }" v-html="item.description" v-on:mousedown="selectOriginAddress(item.description)"></li>
 									</ul>
 								</div>
 								<span class="error-message" v-html="originAddressMessage"></span>
@@ -54,29 +55,75 @@
 										name="address-in"
 										v-model="destinationAddress"
 										v-on:input="getDestinationAutocomplete"
+										v-on:keydown="targetKeydown"
 										v-on:focusout="deleteDestinationAutocomplete" >
 									<ul class="autocomplete-variants">
-										<li v-for="item in destinationAddressVariants" v-html="item.description" v-on:click="selectDestinationAddress(item.description)"></li>
+										<li v-for="(item, index) in destinationAddressVariants" v-bind:class="{ focused: index==targetIndex }" v-html="item.description" v-on:mousedown="selectDestinationAddress(item.description)"></li>
 									</ul>
 								</div>
 								<span class="error-message" v-html="destinationAddressMessage"></span>
 							</div>
 
-							<div v-bind:class="[ 'input-field', ifDateCO ]">
+							<div class="form-date-selector">
+								<span class="form-title">Umzugsdatum</span>
+								<div class="two-inputs two-inputs--no-margin two-inputs--centered-all">
+
+									<div class="two-inputs--col">
+										<label class="form-radios-label" v-on:click="selectMod(1)">
+											Fixdatum
+											<input name="moving_date" type="radio" checked="checked" class="form-radios">
+											<span class="form-radios-checkmark"></span>
+										</label>
+									</div>
+
+									<div class="two-inputs--col">
+										<label class="form-radios-label" v-on:click="selectMod(2)">
+											Von-bis
+											<input name="moving_date" type="radio" class="form-radios">
+											<span class="form-radios-checkmark"></span>
+										</label>
+									</div>
+
+								</div>
+							</div>
+
+							<div v-bind:class="[ 'input-field', ifDateCO ]" v-show="1 === movementMod">
 								<label for="movement-date">
-									<i class="icon-kalender"></i> Umzugsdatum
+									<i class="icon-kalender"></i> Datum
 								</label>
 								<date-picker @update-movement-date="updateDate" movement-date="movementDate"></date-picker>
 								<span class="error-message" v-html="movementDateMessage"></span>
 							</div>
 
-						</fieldset>
+							<div class="two-inputs" v-show="2 === movementMod">
+								<div class="two-inputs--col">
+									<div v-bind:class="[ 'input-field', ifDateFromCO ]">
+										<label for="movement-date">
+											<i class="icon-kalender"></i> von
+										</label>
+										<date-picker @update-movement-date="updateDateFrom" movement-date="movementDateFrom"></date-picker>
+										<span class="error-message" v-html="movementDateFromMessage"></span>
+									</div>
+								</div>
+								<div class="two-inputs--col">
+									<div v-bind:class="[ 'input-field', ifDateToCO ]">
+										<label for="movement-date">
+											<i class="icon-kalender"></i> bis
+										</label>
+										<date-picker @update-movement-date="updateDateTo" movement-date="movementDateTo"></date-picker>
+										<span class="error-message" v-html="movementDateToMessage"></span>
+									</div>
+								</div>
+							</div>
 
-						<button
-							type="submit"
-							class="btn btn--secondary"
-							:disabled="!buttonActive"
-							v-on:click="createInputInformations" ><?php the_field( 'configurator_button' ); ?></button>
+						</fieldset>
+						<div class="text-center">
+							<button
+									type="submit"
+									class="btn btn--secondary"
+									:disabled="!buttonActive"
+									v-on:click="createInputInformations" ><?php the_field( 'configurator_button' ); ?></button>
+						</div>
 					</div>
 				</div>
 			</div>

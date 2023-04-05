@@ -2,6 +2,7 @@ var regexpbrowser = /chrom(e|ium)/;
 var app = undefined;
 var temparray = [];
 window.umconfigurator = true;
+jQuery.browser = {};
 jQuery.browser.chrome = regexpbrowser.test( navigator.userAgent.toLowerCase( ) );
 
 jQuery( document ).ready( function( $ ) {
@@ -58,6 +59,8 @@ jQuery( document ).ready( function( $ ) {
 			props: [ 'movementDate' ],
 			mounted: function() {
 				var self = this;
+				$( this.$el ).val( '' );
+				console.log( 'Clean field', $( this.$el ) );
 				$( this.$el ).datepicker({
 					prevText: '&#x3c;zurück',
 					prevStatus: '',
@@ -107,17 +110,37 @@ jQuery( document ).ready( function( $ ) {
 				originAddress: '',
 				originAddressMessage: '',
 				originAddressVariants: [],
+				originIndex: -1,
+				targetIndex: -1,
 				destinationAddress: '',
 				destinationAddressMessage: '',
 				destinationAddressVariants: [],
+				movementMod: 1,
 				movementDate: '',
 				movementDateMessage: '',
-				processing: false
+				movementDateFrom: '',
+				movementDateFromMessage: '',
+				movementDateTo: '',
+				movementDateToMessage: '',
+				processing: false,
+				originXHR: undefined,
+				targetXHR: undefined
 			},
 			methods: {
+				selectMod: function( int ) {
+					this.movementMod = int;
+				},
 				updateDate: function( date ) {
 					this.movementDate = date;
 					this.movementDateMessage = '';
+				},
+				updateDateFrom: function( date ) {
+					this.movementDateFrom = date;
+					this.movementDateFromMessage = '';
+				},
+				updateDateTo: function( date ) {
+					this.movementDateTo = date;
+					this.movementDateToMessage = '';
 				},
 				selectOriginAddress: function( value ) {
 					this.originAddress = value;
@@ -125,12 +148,45 @@ jQuery( document ).ready( function( $ ) {
 				selectDestinationAddress: function( value ) {
 					this.destinationAddress = value;
 				},
+				originKeydown: function( e ) {
+
+					// 38 -- keyup, 40 --keydown, 13 --enter.
+					if ( 38 == e.keyCode && 0 < this.originIndex ) {
+						this.originIndex--;
+						e.preventDefault();
+					} else if ( 40 == e.keyCode && this.originIndex < this.originAddressVariants.length ) {
+						this.originIndex++;
+						e.preventDefault();
+					} else if ( 13 == e.keyCode ) {
+						e.preventDefault();
+						this.originAddress = this.originAddressVariants[this.originIndex].description;
+						this.deleteOriginAutocomplete();
+					}
+				},
+				targetKeydown: function( e ) {
+
+					// 38 -- keyup, 40 --keydown, 13 --enter.
+					if ( 38 == e.keyCode && 0 < this.targetIndex ) {
+						this.targetIndex--;
+						e.preventDefault();
+					} else if ( 40 == e.keyCode && this.targetIndex < this.destinationAddressVariants.length ) {
+						this.targetIndex++;
+						e.preventDefault();
+					} else if ( 13 == e.keyCode ) {
+						this.destinationAddress = this.destinationAddressVariants[this.targetIndex].description;
+						this.deleteDestinationAutocomplete();
+						e.preventDefault();
+					}
+				},
 				getOriginAutocomplete: function() {
 					var self = this;
 
 					self.originAddressMessage = '';
 					if ( 4 < self.originAddress.length ) {
-						$.ajax({
+						if ( undefined !== self.originXHR ) {
+							self.originXHR.abort();
+						}
+						self.originXHR = $.ajax({
 							dataType: 'json',
 							url: UMCONFUrls.baseUrl + 'um-configurator/v1/autocomplete/' + self.originAddress,
 							success: function( data ) {
@@ -147,6 +203,9 @@ jQuery( document ).ready( function( $ ) {
 				},
 				deleteOriginAutocomplete: function() {
 					var self = this;
+					if ( undefined !== self.originXHR ) {
+						self.originXHR.abort();
+					}
 					setTimeout( function() {
 						self.originAddressVariants = [];
 					}, 100 );
@@ -156,7 +215,10 @@ jQuery( document ).ready( function( $ ) {
 
 					self.destinationAddressMessage = '';
 					if ( 4 < self.destinationAddress.length ) {
-						$.ajax({
+						if ( undefined !== self.targetXHR ) {
+							self.targetXHR.abort();
+						}
+						self.targetXHR = $.ajax({
 							dataType: 'json',
 							url: UMCONFUrls.baseUrl + 'um-configurator/v1/autocomplete/' + self.destinationAddress,
 							success: function( data ) {
@@ -173,6 +235,9 @@ jQuery( document ).ready( function( $ ) {
 				},
 				deleteDestinationAutocomplete: function() {
 					var self = this;
+					if ( undefined !== self.targetXHR ) {
+						self.targetXHR.abort();
+					}
 					setTimeout( function() {
 						self.destinationAddressVariants = [];
 					}, 100 );
@@ -187,7 +252,10 @@ jQuery( document ).ready( function( $ ) {
 						data: {
 							'originAddress': self.originAddress,
 							'destinationAddress': self.destinationAddress,
-							'date': self.movementDate
+							'date': self.movementDate,
+							'dateFrom': self.movementDateFrom,
+							'dateTo': self.movementDateTo,
+							'mode': self.movementMod
 						},
 						success: function( data ) {
 							self.processing = false;
@@ -204,6 +272,18 @@ jQuery( document ).ready( function( $ ) {
 
 							if ( undefined !== data.responseJSON.destination_address_message ) {
 								self.destinationAddressMessage = data.responseJSON.destination_address_message;
+							}
+
+							if ( undefined !== data.responseJSON.date_message ) {
+								self.movementDateMessage = data.responseJSON.date_message;
+							}
+
+							if ( undefined !== data.responseJSON.date_from_message ) {
+								self.movementDateFromMessage = data.responseJSON.date_from_message;
+							}
+
+							if ( undefined !== data.responseJSON.date_to_message ) {
+								self.movementDateToMessage = data.responseJSON.date_to_message;
 							}
 						}
 					});
@@ -230,14 +310,29 @@ jQuery( document ).ready( function( $ ) {
 						'input-field--has-error': '' !== this.movementDateMessage
 					};
 				},
+				ifDateFromCO: function() {
+					return {
+						'input-field--has-content': '' !== this.movementDateFrom,
+						'input-field--has-error': '' !== this.movementDateFromMessage
+					};
+				},
+				ifDateToCO: function() {
+					return {
+						'input-field--has-content': '' !== this.movementDateTo,
+						'input-field--has-error': '' !== this.movementDateToMessage
+					};
+				},
 				buttonActive: function() {
-					return ( '' !== this.originAddress ) &&
-						( '' !== this.destinationAddress ) &&
-						( '' !== this.movementDate ) &&
-						( '' == this.originAddressMessage ) &&
-						( '' == this.destinationAddressMessage ) &&
-						( '' == this.movementDateMessage ) &&
-						! this.processing;
+					var condOne = ( '' !== this.originAddress ) && ( '' !== this.destinationAddress );
+					if ( 1 == this.movementMod ) {
+						condSecond = ( '' !== this.movementDate ) && ( '' == this.movementDateMessage );
+					} else if ( 2 == this.movementMod ) {
+						condSecond = ( '' !== this.movementDateFrom ) && ( ''  !== this.movementDateTo ) && ( '' == this.movementDateFromMessage ) && ( '' == this.movementDateToMessage );
+					} else {
+						condSecond = false;
+					}
+
+					return condOne && condSecond && ! this.processing;
 				}
 
 			},

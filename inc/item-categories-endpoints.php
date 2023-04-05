@@ -45,8 +45,15 @@ add_action(
 			'um-configurator/v1',
 			'/item-category/',
 			array(
-				'methods'  => 'POST',
-				'callback' => 'umconf_create_item_category',
+				'methods'             => 'POST',
+				'callback'            => 'umconf_create_item_category',
+				'permission_callback' => function () {
+					if ( UM_CONFIG_DO_AUTH ) {
+						return is_user_logged_in();
+					} else {
+						return true;
+					}
+				},
 			)
 		);
 	}
@@ -59,8 +66,15 @@ add_action(
 			'um-configurator/v1',
 			'/item-category/(?P<id>\d+)',
 			array(
-				'methods'  => 'PUT',
-				'callback' => 'umconf_update_item_category',
+				'methods'             => 'PUT',
+				'callback'            => 'umconf_update_item_category',
+				'permission_callback' => function () {
+					if ( UM_CONFIG_DO_AUTH ) {
+						return is_user_logged_in();
+					} else {
+						return true;
+					}
+				},
 			)
 		);
 	}
@@ -73,8 +87,15 @@ add_action(
 			'um-configurator/v1',
 			'/item-category/(?P<id>\d+)',
 			array(
-				'methods'  => 'DELETE',
-				'callback' => 'umconf_delete_item_category',
+				'methods'             => 'DELETE',
+				'callback'            => 'umconf_delete_item_category',
+				'permission_callback' => function () {
+					if ( UM_CONFIG_DO_AUTH ) {
+						return is_user_logged_in();
+					} else {
+						return true;
+					}
+				},
 			)
 		);
 	}
@@ -101,7 +122,7 @@ function umconf_get_all_item_categories( $request ) {
 		$return[] = array(
 			'id'   => $term->term_id,
 			'slug' => $term->slug,
-			'name' => $term->name,
+			'name' => htmlspecialchars_decode( $term->name ),
 		);
 	}
 	$request = '';
@@ -132,7 +153,7 @@ function umconf_get_item_category( $request ) {
 		$return = array(
 			'id'   => $term->term_id,
 			'slug' => $term->slug,
-			'name' => $term->name,
+			'name' => htmlspecialchars_decode( $term->name ),
 		);
 	}
 
@@ -182,11 +203,13 @@ function umconf_create_item_category( $request ) {
 			$return = array(
 				'id'   => $term->term_id,
 				'slug' => $term->slug,
-				'name' => $term->name,
+				'name' => htmlspecialchars_decode( $term->name ),
 			);
 		}
 
-		return $return;
+		$response = new WP_REST_Response( $return );
+		$response->set_status( 201 );
+		return $response;
 	} else {
 		return new WP_Error(
 			$insert_data->get_error_code(),
@@ -222,8 +245,24 @@ function umconf_update_item_category( $request ) {
 
 	if ( ! is_wp_error( $insert_data ) ) {
 
-		$data     = array( 'message' => 'Kategorie aktualisiert.' );
-		$response = new WP_REST_Response( $data );
+		$terms = get_terms(
+			array(
+				'taxonomy'         => 'item-categories',
+				'hide_empty'       => false,
+				'term_taxonomy_id' => $term_id,
+			)
+		);
+
+		$return = array();
+		foreach ( $terms as $term ) {
+			$return = array(
+				'id'   => $term->term_id,
+				'slug' => $term->slug,
+				'name' => htmlspecialchars_decode( $term->name ),
+			);
+		}
+
+		$response = new WP_REST_Response( $return );
 		$response->set_status( 200 );
 		return $response;
 
@@ -255,9 +294,8 @@ function umconf_delete_item_category( $request ) {
 
 	if ( ! is_wp_error( $operation_status ) ) {
 
-		$data     = array( 'message' => 'Kategorie gelöscht.' );
-		$response = new WP_REST_Response( $data );
-		$response->set_status( 200 );
+		$response = new WP_REST_Response();
+		$response->set_status( 204 );
 		return $response;
 
 	} else {
