@@ -18,7 +18,7 @@
 defined( 'ABSPATH' ) || die( 'Kein direkter Zugriff möglich!' );
 defined( 'UMZUGKONF_SLUG' ) || define( 'UMZUGKONF_SLUG', 'umzugskosten-berechnen' );
 defined( 'UMZUGKONFADMIN_SLUG' ) || define( 'UMZUGKONFADMIN_SLUG', 'konfigurator-admin' );
-defined( 'UM_CONFIG_DO_AUTH' ) || define( 'UM_CONFIG_DO_AUTH', true );
+defined( 'UM_CONFIG_DO_AUTH' ) || define( 'UM_CONFIG_DO_AUTH',  'local'  !== wp_get_environment_type() );
 define( 'UM_CONFIG_OPTION_GROUP', '_ummei' );
 define( 'UM_CONFIG_OPTION_PAGE', 'ummei' );
 define( 'UM_CONFIG_OPTION_GOOGLE_API', '_umconf_google_api' );
