@@ -10,7 +10,7 @@
 /*
  * Plugin Name:  Umzugmeister Konfigurator
  * Description:  Konfigurator, der den Preis eines Umzuges berechnet und ein Angebot verschickt
- * Version:      1.0.0
+ * Version:1.0.0
  * License:      GPL2
  * License URI:  https://www.gnu.org/licenses/gpl-2.0.html
  */
