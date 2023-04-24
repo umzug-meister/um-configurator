@@ -8,9 +8,9 @@ Ihre Anfrage ID lautet:  <?php echo $order['id']; ?>.
 --
 
 Freundliche Grüße
-Umzug-Meister
+Umzug Ruck Zuck
 
-Tel: 089 896 423 95
-Mobil: 0176 237 567 89  
-Email: info@umzug-meister.de
-Web: www.umzug-meister.de
+Tel: 089 30642972
+Mobil: 0176 10171990
+Email: umzugruckzuck@gmail.com
+Web: www.umzugruckzuck.de
