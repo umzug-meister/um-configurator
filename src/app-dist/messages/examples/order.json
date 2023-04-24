@@ -1,0 +1,107 @@
+{
+    "customer": {
+        "salutation": "Herr",
+        "firstName": "Nikolai",
+        "lastName": "Kabiolskij",
+        "company": "Company",
+        "telNumber": "01746557547",
+        "email": "nka@gmx.net"
+    },
+    "from": {
+        "floor": "5. Etage",
+        "roomsNumber": "1",
+        "parkingSlot": true,
+        "area": "10 m²",
+        "personsNumber": "1",
+        "liftType": "6 Personen",
+        "runningDistance": "0 m.",
+        "movementObject": "Wohnung",
+        "address": "Kraepelinstraße, München, Deutschland"
+    },
+    "to": {
+        "liftType": "6 Personen",
+        "runningDistance": "0 m.",
+        "parkingSlot": false,
+        "floor": "3. Etage",
+        "address": "Gustav-Adolf-Straße, Berlin, Deutschland"
+    },
+    "distance": "585.793",
+    "services": [
+        {
+            "price": "3",
+            "tag": "Packmaterial",
+            "description": "Große",
+            "name": "Umzugskarton",
+            "id": 271,
+            "colli": "24"
+        },
+        {
+            "price": "23",
+            "tag": "Packmaterial",
+            "description": "habe",
+            "name": "Und",
+            "id": 268,
+            "colli": "23"
+        },
+        {
+            "price": "30",
+            "tag": "Bohrarbeiten",
+            "description": "Preis, pro Schrank",
+            "name": "Schränke aufhängen.",
+            "id": 270,
+            "colli": "1"
+        }
+    ],
+    "items": [
+        {
+            "id": 262,
+            "categories": [
+                "Kinderzimmer"
+            ],
+            "colli": "2",
+            "demontage": true,
+            "name": "Möbel",
+            "volume": "12"
+        },
+        {
+            "id": 227,
+            "categories": [
+                "Kinderzimmer"
+            ],
+            "colli": "3",
+            "demontage": true,
+            "name": "Kleiderschrank",
+            "volume": "4"
+        },
+        {
+            "id": 261,
+            "categories": [
+                "Schlafzimmer"
+            ],
+            "colli": "3",
+            "demontage": true,
+            "name": "Möbel",
+            "volume": "12"
+        },
+        {
+            "id": 227,
+            "categories": [
+                "Schlafzimmer"
+            ],
+            "colli": "2",
+            "name": "Kleiderschrank",
+            "volume": "4"
+        }
+    ],
+    "date": "19.07.2019",
+    "volume": "80",
+    "volumePrice": "1824.00",
+    "rideCosts": "921.27",
+    "sum": "4372.87",
+    "isDateFix": false,
+    "text": "Hey, was geht ab?",
+    "creationTime": "16.3.2019, 09:11:55",
+    "lupd": "16.3.2019, 09:11:55",
+    "name": "",
+    "id": 291
+}

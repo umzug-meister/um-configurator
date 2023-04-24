@@ -1,0 +1,35 @@
+Sehr geehr...
+
+...
+
+anbei die Kopie Ihrer Anfrage:
+
+
+Id: 123
+
+
+Kunde
+
+Anrede: Herr
+Vorname: alex
+Name: Stein
+
+...
+
+Von
+
+Etage:...
+
+
+
+##############
+
+Wenn möglich:
+ - Auftrags id mit jeweils 2 zeilen Abstand abgrenzen und als allererstes anzeigen
+ - wenn (typeof value === "object") // z.b. customer-> mit jeweils 1 Zeile abgrenzen und dann alle properties drunter
+ - sonst keine Zeilenabstände
+ - true - false gegen ja/Nein ersetzen
+
+##############
+Ich werde demnächst mal prüfen ob es evtl. hilfreich ist, die redundanten Properties wie item-id etc. aus dem Auftrag vor dem POST komplett zu entfernen.
+
