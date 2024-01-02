@@ -55,6 +55,17 @@ if ( $mainjs ) {
 		true
 	);
 	wp_enqueue_script( 'mainjs' );
+	
+	add_filter("script_loader_tag", "add_module_to_mainjs", 10, 3);
+	function add_module_to_mainjs($tag, $handle, $src)
+	{
+		if ("mainjs" === $handle) {
+			$tag = '<script type="module" src="' . esc_url($src) . '"></script>';
+		}
+
+		return $tag;
+	}
+
 }
 
 if ( $maincss ) {
