@@ -1,6 +1,6 @@
 <?php
 /**
- * Umzugmeister Konfigurator
+ * Konfigurator
  *
  * Enqueue styles and scripts.
  *

@@ -1,6 +1,6 @@
 <?php
 /**
- * Umzugmeister Konfigurator
+ * Konfigurator
  *
  * Admin-Panel zur Verwaltung von Umzugsartikeln, Dienstleistungen und Aufträgen
  * inklusive Angebotsversand per E-Mail.
@@ -9,7 +9,7 @@
  */
 
 /*
- * Plugin Name:  Umzugmeister Konfigurator
+ * Plugin Name:  Konfigurator
  * Description:  Admin-Panel für Umzugsartikel, Dienstleistungen und Auftragsverwaltung mit Angebots-E-Mail
  * Version:      2.0.0
  * License:      GPL2
@@ -41,6 +41,7 @@ add_action( 'template_redirect', 'umconf_admin_html' );
 add_action( 'template_redirect', 'umconf_redirects' );
 add_action( 'wp_head', 'umconf_admin_css' );
 add_action( 'wp_footer', 'umconf_add_custom_js' );
+add_filter( 'pre_get_document_title', 'umconf_admin_page_title' );
 add_filter( 'wp_mail_content_type', 'umconf_set_html_mail_content_type' );
 
 remove_filter( 'the_title', 'wptexturize' );
@@ -127,7 +128,7 @@ function umconf_activation() {
 	// Createa configurator page.
 	$newadminpostid = wp_insert_post(
 		array(
-			'post_title'  => __( 'Konfigurator Admin', 'um-configurator' ),
+			'post_title'  => __( 'Konfigurator', 'um-configurator' ),
 			'post_status' => 'publish',
 			'post_type'   => 'page',
 			'post_name'   => UMZUGKONFADMIN_SLUG,
@@ -515,6 +516,16 @@ window.UMCONFUrls = window.UMCONFUrls || {};
 window.UMCONFUrls.nonce = "<?php echo wp_create_nonce( 'wp_rest' ); ?>";
 </script>
 <?php
+}
+
+/**
+ * Set browser tab title for the konfigurator page.
+ */
+function umconf_admin_page_title( $title ) {
+	if ( is_page( intval( get_option( '_umconf_page_for_configurator_admin' ) ) ) ) {
+		return __( 'Konfigurator', 'um-configurator' );
+	}
+	return $title;
 }
 
 /**

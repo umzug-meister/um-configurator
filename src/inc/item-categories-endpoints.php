@@ -1,6 +1,6 @@
 <?php
 /**
- * Umzugmeister Konfigurator
+ * Konfigurator
  *
  * Dekalration der Endpoints.
  *

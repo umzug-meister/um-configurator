@@ -1,6 +1,6 @@
 <?php
 /**
- * Umzugmeister Konfigurator Settings Section
+ * Konfigurator Settings Section
  *
  * Fields HTML for Section.
  *

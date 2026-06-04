@@ -1,6 +1,6 @@
 <?php
 /**
- * Umzugmeister Konfigurator Settings Page Fields
+ * Konfigurator Settings Page Fields
  *
  * Fields HTML for Settingspage.
  *
