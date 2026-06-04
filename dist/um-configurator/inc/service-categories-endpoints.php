@@ -48,11 +48,7 @@ add_action(
 				'methods'             => 'POST',
 				'callback'            => 'umconf_create_service_category',
 				'permission_callback' => function () {
-					if ( UM_CONFIG_DO_AUTH ) {
-						return is_user_logged_in();
-					} else {
-						return true;
-					}
+					return is_user_logged_in();
 				},
 			)
 		);
@@ -69,11 +65,7 @@ add_action(
 				'methods'             => 'PUT',
 				'callback'            => 'umconf_update_service_category',
 				'permission_callback' => function () {
-					if ( UM_CONFIG_DO_AUTH ) {
-						return is_user_logged_in();
-					} else {
-						return true;
-					}
+					return is_user_logged_in();
 				},
 			)
 		);
@@ -90,11 +82,7 @@ add_action(
 				'methods'             => 'DELETE',
 				'callback'            => 'umconf_delete_service_category',
 				'permission_callback' => function () {
-					if ( UM_CONFIG_DO_AUTH ) {
-						return is_user_logged_in();
-					} else {
-						return true;
-					}
+					return is_user_logged_in();
 				},
 			)
 		);

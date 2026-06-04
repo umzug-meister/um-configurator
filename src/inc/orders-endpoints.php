@@ -17,15 +17,8 @@ add_action(
 			'um-configurator/v1',
 			'/order/all',
 			array(
-				'methods'             => 'GET',
-				'callback'            => 'umconf_get_all_order',
-				'permission_callback' => function () {
-					if ( UM_CONFIG_DO_AUTH ) {
-						return is_user_logged_in();
-					} else {
-						return true;
-					}
-				},
+				'methods'  => 'GET',
+				'callback' => 'umconf_get_all_order',
 			)
 		);
 	}
@@ -38,15 +31,8 @@ add_action(
 			'um-configurator/v1',
 			'/order/(?P<id>\d+)',
 			array(
-				'methods'             => 'GET',
-				'callback'            => 'umconf_get_order',
-				'permission_callback' => function () {
-					if ( UM_CONFIG_DO_AUTH ) {
-						return is_user_logged_in();
-					} else {
-						return true;
-					}
-				},
+				'methods'  => 'GET',
+				'callback' => 'umconf_get_order',
 			)
 		);
 	}
@@ -76,11 +62,7 @@ add_action(
 				'methods'             => 'PUT',
 				'callback'            => 'umconf_update_order',
 				'permission_callback' => function () {
-					if ( UM_CONFIG_DO_AUTH ) {
-						return is_user_logged_in();
-					} else {
-						return true;
-					}
+					return is_user_logged_in();
 				},
 			)
 		);
@@ -97,11 +79,7 @@ add_action(
 				'methods'             => 'DELETE',
 				'callback'            => 'umconf_delete_order',
 				'permission_callback' => function () {
-					if ( UM_CONFIG_DO_AUTH ) {
-						return is_user_logged_in();
-					} else {
-						return true;
-					}
+					return is_user_logged_in();
 				},
 			)
 		);
