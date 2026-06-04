@@ -344,59 +344,6 @@ function umconf_send_order_email( $order ) {
 	// phpcs:disable
 	$order = $order;
 
-	// Load translations.
-	$file_path    = dirname( dirname( __FILE__ ) ) . '/app-dist/messages/translationsMapping.json';
-	$translations = json_decode( file_get_contents( $file_path ), true );
-	$translations = $translations;
-
-	// Load blacklist.
-	$file_path2 = dirname( dirname( __FILE__ ) ) . '/app-dist/messages/blacklist.json';
-	$blacklist  = json_decode( file_get_contents( $file_path2 ), true );
-
-	$ordertable = '';
-	$orderonedimension = '';
-	umconf_extract_keyvalues( $order, $orderonedimension, '', $blacklist );
-	$orderonedimension = str_replace( "<break>\n<break>", '<break>', $orderonedimension );
-	$orderonedimensionarray = explode( "\n", $orderonedimension );
-
-	foreach( $orderonedimensionarray as $line ) {
-		if ( '<break>' === $line ) {
-			$ordertable .= "\n";
-		} else {
-			$parts = explode( '<separator>', $line );
-			$first_part  = $parts[0];
-			$second_part = isset( $parts[1] ) ? $parts[1] : '';
-
-			if ( ! in_array( $first_part, $blacklist ) ) {
-				$temp = explode( '.', $first_part );
-				$last_word = $temp[ count( $temp ) - 1 ];
-
-				$firstp = "";
-				$secondp = "";
-				if ( isset( $translations[ $last_word ] ) ) {
-					$firstp = $translations[ $last_word ];
-				} else {
-					$firstp = $last_word;
-				}
-
-				if ( isset( $translations[ $second_part ] ) ) {
-					$secondp = $translations[ $second_part ];
-				} else {
-					$secondp = $second_part;
-				}
-				$separator = ' ';
-
-				if ( '' !== $secondp )  {
-					$separator = ': ';
-				}
-
-				$ordertable .= $firstp . $separator . $secondp . "\n";
-			}
-		}
-	}
-
-	$ordertable = str_replace( "\n\n\n", "\n\n", $ordertable );
-
 	// Load load template.
 	$file_path3 = dirname( dirname( __FILE__ ) ) . '/app-dist/messages/templates/email.php';
 	ob_start();
@@ -455,45 +402,4 @@ function umconf_filter_wp_mail_from_address( $address ) {
 		$address = get_option( UM_CONFIG_OPTION_EMAIL_FROM_ADDRESS );
 	}
 	return $address;
-}
-
-/**
- * Make an array one dimensional.
- *
- * @param array  $array     An array to process.
- * @param strin  $collector String that gathers the fields.
- * @param string $prefix    Prefix for array keys.
- * @param array  $blacklist Defines what keys in array should be ignored.
- *
- * @return void
- */
-function umconf_extract_keyvalues( $array, &$collector, $prefix = '', $blacklist = array() ) {
-	foreach ( $array as $key => $element ) {
-
-		if ( is_bool( $element ) ) {
-			if ( $element ) {
-				$element = 'bool_true';
-			} else {
-				$element = 'bool_false';
-			}
-		}
-
-		if ( is_array( $element ) ) {
-			if ( is_numeric( $key ) ) {
-				$collector .= "<break>\n";
-				umconf_extract_keyvalues( $element, $collector, $prefix, $blacklist );
-				$collector .= "<break>\n";
-			} else {
-				$collector .= "<break>\n" . $prefix . $key . "\n<break>\n";
-				umconf_extract_keyvalues( $element, $collector, $prefix . $key . '.', $blacklist );
-				$collector .= "<break>\n";
-			}
-		} else {
-			if ( is_numeric( $key ) ) {
-				$collector .= rtrim( $prefix, '.' ) . '<separator>' . $element . "\n";
-			} else {
-				$collector .= $prefix . $key . '<separator>' . $element . "\n";
-			}
-		}
-	}
 }

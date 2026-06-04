@@ -1,16 +1,16 @@
 Sehr <?php if ( 'Herr' === $order['customer']['salutation'] ) : ?>geehrter<?php else : ?>geehrte<?php endif; ?> <?php echo $order['customer']['salutation']; ?> <?php echo $order['customer']['lastName']; ?>,
 
+vielen Dank für Ihre Anfrage! Wir haben sie erhalten und kümmern uns darum.
 
-vielen Dank für Ihre Anfrage. Wir prüfen die Verfügbarkeit und melden uns schnellstmöglich bei Ihnen.
+Ihre Anfrage-ID: <?php echo $order['id']; ?> (bitte bei Rückfragen angeben).
 
-Ihre Anfrage ID lautet:  <?php echo $order['id']; ?>. 
+Wir melden uns bald bei Ihnen.
 
---
+Freundliche Grüße,
+Ihr UmzugRuckzuck24 Team
 
-Freundliche Grüße
-Umzug Ruck Zuck
-
+---
 Tel: 089 30642972
 Mobil: 0176 10171990
-Email: umzugruckzuck@gmail.com
-Web: www.umzugruckzuck.de
+E-Mail: info@umzugruckzuck24.de
+Web: www.umzugruckzuck24.de

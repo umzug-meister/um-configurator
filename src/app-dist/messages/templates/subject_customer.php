@@ -1,1 +1,1 @@
-Bestätigung zur Anfrage: #<?php echo $order['id']; ?> vom <?php echo $order['creationTime']; ?>
+Ihre Umzugsanfrage <?php echo $order['id']; ?> ist bei uns angekommen
