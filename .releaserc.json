@@ -4,7 +4,7 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     ["@semantic-release/exec", {
-      "prepareCmd": "sed -i 's/* Version:       [0-9.]*/* Version:       ${nextRelease.version}/' src/um-configurator.php && sed -i 's/\"version\": \"[0-9.]*\"/\"version\": \"${nextRelease.version}\"/' package.json && npm run build"
+      "prepareCmd": "sed -i 's/\\* Version:      [0-9.]*/\\* Version:      ${nextRelease.version}/' src/um-configurator.php && sed -i 's/\"version\": \"[0-9.]*\"/\"version\": \"${nextRelease.version}\"/' package.json && npm run build"
     }],
     ["@semantic-release/git", {
       "assets": ["src/um-configurator.php", "package.json"],
