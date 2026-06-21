@@ -7,7 +7,7 @@ Ihre Anfrage-ID: <?php echo $order['id']; ?> (bitte bei Rückfragen angeben).
 Wir melden uns bald bei Ihnen.
 
 Freundliche Grüße,
-Ihr UmzugRuckzuck24 Team
+Ihr Umzug Ruck Zuck Team
 
 ---
 Tel: 089 30642972
